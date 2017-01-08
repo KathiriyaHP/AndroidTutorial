@@ -1,0 +1,23 @@
+@TargetApi(16)
+    public void changeSeekbarColor(SeekBar s,int colorp,int colors,int colorb)
+    {
+        PorterDuff.Mode mMode = PorterDuff.Mode.SRC_ATOP;
+
+        LayerDrawable layerDrawable = (LayerDrawable) s.getProgressDrawable();
+        Drawable progress = (Drawable) layerDrawable.findDrawableByLayerId(android.R.id.progress);
+        Drawable secondary = (Drawable) layerDrawable.findDrawableByLayerId(android.R.id.secondaryProgress);
+        Drawable background = (Drawable) layerDrawable.findDrawableByLayerId(android.R.id.background);
+        Drawable th = s.getThumb();
+
+        // Setting colors
+        progress.setColorFilter(colorp,mMode);
+        secondary.setColorFilter(colors,mMode);
+        background.setColorFilter(colorb, mMode);
+        th.setColorFilter(colorp,mMode);
+
+        // Applying Tinted Drawables
+        layerDrawable.setDrawableByLayerId(android.R.id.progress, progress);
+        layerDrawable.setDrawableByLayerId(android.R.id.secondaryProgress, secondary);
+        layerDrawable.setDrawableByLayerId(android.R.id.background, background);
+
+    }

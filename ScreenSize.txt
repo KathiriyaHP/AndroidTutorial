@@ -1,0 +1,38 @@
+DisplayMetrics metrics = new DisplayMetrics();
+getWindowManager().getDefaultDisplay().getMetrics(metrics);
+int density = metrics.densityDpi;
+Log.e(TAG,"density : "+density);
+
+switch(density)
+{
+case DisplayMetrics.DENSITY_LOW:
+Log.e(TAG,"LDPI");
+break;
+case DisplayMetrics.DENSITY_MEDIUM:
+Log.e(TAG,"MDPI");
+break;
+case DisplayMetrics.DENSITY_HIGH:
+Log.e(TAG,"HDPI");
+break;
+case DisplayMetrics.DENSITY_XHIGH:
+Log.e(TAG,"XHDPI");
+break;
+case DisplayMetrics.DENSITY_XXHIGH:
+Log.e(TAG,"XHDPI");
+break;
+case DisplayMetrics.DENSITY_280:
+Log.e(TAG,"---> DENSITY_280");
+break;
+case DisplayMetrics.DENSITY_360:
+Log.e(TAG,"---> DENSITY_360");
+break;
+case DisplayMetrics.DENSITY_400:
+Log.e(TAG,"---> DENSITY_360");
+break;
+case DisplayMetrics.DENSITY_420:
+Log.e(TAG,"---> DENSITY_420");
+break;
+case DisplayMetrics.DENSITY_560:
+Log.e(TAG,"---> DENSITY_360");
+break;
+}

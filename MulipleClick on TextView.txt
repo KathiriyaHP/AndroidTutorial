@@ -1,0 +1,23 @@
+String s=textView.getText().toString();
+            SpannableString ss = new SpannableString(s);
+            final String first ="Terms of Service";
+            final String second =",Privancy Policy, Sender Refund Policy";
+            int firstIndex = s.toString().indexOf(first);
+            int secondIndex = s.toString().indexOf(second);
+            ClickableSpan firstwordClick = new ClickableSpan() {
+                @Override
+                public void onClick(View widget) {
+                    Toast.makeText(LoginActivity.this,first,Toast.LENGTH_SHORT).show();
+                }
+            };
+            ClickableSpan secondwordClick = new ClickableSpan() {
+                @Override
+                public void onClick(View widget) {
+                    Toast.makeText(LoginActivity.this,second,Toast.LENGTH_SHORT).show();
+                }
+            };
+            ss.setSpan(firstwordClick,firstIndex, firstIndex+first.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            ss.setSpan(secondwordClick,secondIndex, secondIndex+second.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            textView.setLinksClickable(true);
+            textView.setMovementMethod(LinkMovementMethod.getInstance());
+            textView.setText(ss, TextView.BufferType.SPANNABLE);

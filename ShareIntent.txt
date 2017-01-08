@@ -1,0 +1,18 @@
+private void initShareIntent()
+{ 
+	try
+	{ 
+		//Uri uri = Uri.fromFile(new File(img_path)); 
+		Intent shareIntent = new Intent(); 
+		shareIntent.setAction(Intent.ACTION_SEND); 
+		shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Win Or Loss"); 
+		shareIntent.putExtra(Intent.EXTRA_TEXT,"Download amazing application Win Or Loss from play store:"); 			// shareIntent.putExtra(Intent.EXTRA_STREAM, uri); 
+		// shareIntent.setType("image/*"); 
+		shareIntent.setType("text/plain"); 
+		shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION); startActivity(Intent.createChooser(shareIntent, "send")); 
+	}
+	catch(Exception e) 
+	{
+		e.printStackTrace(); 
+	}
+}

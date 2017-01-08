@@ -1,0 +1,143 @@
+public static String IS_INSTALLTED="false"; 
+
+//Share.java  
+public static String decodeString(String string) throws UnsupportedEncodingException {
+        return  URLDecoder.decode(string, "UTF-8");
+    }
+
+    public static String encodeString(String string) throws UnsupportedEncodingException {
+        return  URLEncoder.encode(string, "UTF-8");
+    }
+
+//SaveAdapter.java
+myHolder.images.getLayoutParams().height = Share.screenHeight/4;
+
+.placeholder(R.mipmap.bg_loader_big)
+.resize(screenWidth / 2, Share.screenHeight/4)
+
+Favarite.java
+---------
+117 :->String json = Share.decodeString(cursor.getString(2));
+
+compileSdkVersion 'Google Inc.:Google APIs:24'
+compile 'com.google.android.gms:play-services-ads:8.4.0'
+-----------------------------------------------------------
+<uses-permission android:name="com.samsung.android.providers.context.permission.WRITE_USE_APP_FEATURE_SURVEY"/>
+
+ <!--Include the AdActivity configChanges and theme. -->
+        <activity
+            android:name="com.google.android.gms.ads.AdActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
+            android:theme="@android:style/Theme.Translucent" />
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+----------------------------------------------------
+  <!-- AdMob ad unit IDs -->
+    <string name="banner_home_footer">ca-app-pub-1168261283036318/4989955783</string>
+    <string name="interstitial_full_screen">ca-app-pub-1168261283036318/7943422186</string>
+
+-----
+View
+-------------------------
+<com.google.android.gms.ads.AdView
+        android:id="@+id/adView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
+        ads:adSize="BANNER"
+        ads:adUnitId="@string/banner_home_footer"/>
+---------
+Banner
+----------------------------------------------------------
+private AdView mAdView;
+
+ private void  adsBanner()
+    {
+        try
+        {
+            mAdView = (AdView) findViewById(R.id.adView);
+
+            AdRequest adRequest = new AdRequest.Builder()
+//                    .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                    // Check the LogCat to get your test device ID
+                    .addTestDevice(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID))
+                    .build();
+            mAdView.loadAd(adRequest);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+    @Override
+    public void onPause() {
+        if (mAdView != null) {
+            mAdView.pause();
+        }
+        super.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mAdView != null) {
+            mAdView.resume();
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        if (mAdView != null) {
+            mAdView.destroy();
+        }
+        super.onDestroy();
+    }
+----------------------------------------
+
+//Industry
+
+private void InterstitialAd()
+    {
+        try {
+            mInterstitialAd = new InterstitialAd(this);
+
+            // set the ad unit ID
+            mInterstitialAd.setAdUnitId(getString(R.string.interstitial_full_screen));
+
+            AdRequest adRequest = new AdRequest.Builder()
+                    .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                    // Check the LogCat to get your test device ID
+                    .addTestDevice(Secure.getString(getContext().getContentResolver(),Secure.ANDROID_ID))
+                    .build();
+
+            mInterstitialAd.loadAd(adRequest);
+
+            mInterstitialAd.setAdListener(new AdListener() {
+                public void onAdLoaded() {
+                    showInterstitial();
+                }
+                @Override
+                public void onAdClosed() {}
+                @Override
+                public void onAdFailedToLoad(int errorCode) {}
+                @Override
+                public void onAdLeftApplication() {}
+                @Override
+                public void onAdOpened() {}
+            });
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+    private void showInterstitial() {
+        if (mInterstitialAd.isLoaded()) {
+            mInterstitialAd.show();
+        }
+    }
+
+

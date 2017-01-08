@@ -1,0 +1,147 @@
+private void showDateDialog(final TextView tv_date)
+    {
+        try
+        {
+            final Dialog dialog = new Dialog(this);
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialog.setContentView(R.layout.dlg_datepicker);
+            dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+            dialog.setCancelable(true);
+            dialog.setCanceledOnTouchOutside(true);
+            dialog.show();
+
+            final DatePicker datePicker = (DatePicker) dialog.findViewById(R.id.date_picker);
+            Calendar calendar = Calendar.getInstance();
+
+//            if(tv_date)
+
+            datePicker.updateDate(calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH));
+            dialog.findViewById(R.id.btn_set_date).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Calendar calendar = new GregorianCalendar(datePicker.getYear(),datePicker.getMonth(),datePicker.getDayOfMonth());
+
+                    if(tv_date == tv_start_date)
+                    {
+                        startDate = DateFormat.format("yyyy-MM-dd HH:mm:ss", calendar.getTime()).toString();
+
+                        if(Share.isDateAfter(DateFormat.format("yyyy-MM-dd",new Date()).toString(), startDate))
+                        {
+                            tv_date.setText(DateFormat.format("dd-MM-yyyy", calendar.getTime()));
+                            dialog.dismiss();
+                        }
+                        else
+                        {
+                            calendar.setTime(new Date());
+                            startDate = DateFormat.format("yyyy-MM-dd HH:mm:ss", calendar.getTime()).toString();
+                            Toast.makeText(getApplicationContext(),"Please enter valid start date",Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                    else
+                    {
+                        endDate =  DateFormat.format("yyyy-MM-dd HH:mm:ss", calendar.getTime()).toString();
+                        if(Share.isDateAfter(startDate, endDate))
+                        {
+                            tv_date.setText(DateFormat.format("dd-MM-yyyy", calendar.getTime()));
+                            dialog.dismiss();
+                        }
+                        else
+                        {
+                            calendar.setTime(new Date());
+                            endDate = DateFormat.format("yyyy-MM-dd HH:mm:ss", calendar.getTime()).toString();
+//		        		 tv_date.setText(DateFormat.format("MMM dd yyyy", calendar.getTime()));
+                            Toast.makeText(getApplicationContext(),"Please enter valid end date",Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }});
+            dialog.findViewById(R.id.btn_cancel).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.cancel();
+                }
+            });
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+public static boolean isDateAfter(String startDate,String endDate)
+    {
+        try
+        {
+            String myFormatString = "yyyy-MM-dd"; // for example
+            SimpleDateFormat df = new SimpleDateFormat(myFormatString);
+            Date edate = df.parse(endDate);
+            Date startingDate = df.parse(startDate);
+
+            Log.d(TAG,"startDate : "+startingDate.toString());
+            Log.d(TAG,"endDate : "+edate.toString());
+
+            if(edate.equals(startingDate))
+                return true;
+            else if (edate.after(startingDate))
+                return true;
+            else
+                return false;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+dlg_datepicker.xml
+----------------------
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+    <DatePicker
+        android:id="@+id/date_picker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/button1"
+        android:layout_centerHorizontal="true"
+        android:theme="@style/AppTheme.Holo.Light.DarkActionBar"
+        android:calendarViewShown="false"
+        />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorPrimary"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_cancel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:textColor="@android:color/white"
+            android:layout_weight="1"
+            android:text="Cancel"/>
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorPrimaryDark"/>
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_set_date"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="@android:color/white"
+            android:background="@color/colorPrimary"
+            android:text="Ok"/>
+    </LinearLayout>
+</LinearLayout>
+
+
+style
+-----
+<style name="AppTheme.Holo.Light.DarkActionBar" parent="android:Theme.Holo.Light.DarkActionBar" />
+

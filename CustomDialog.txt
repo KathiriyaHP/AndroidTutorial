@@ -1,0 +1,7 @@
+final Dialog dialog = new Dialog(getActivity());
+dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+dialog.setContentView(R.layout.dlg_new_score);
+dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+dialog.setCancelable(true);
+dialog.setCanceledOnTouchOutside(false);
+dialog.show();

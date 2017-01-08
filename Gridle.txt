@@ -1,0 +1,12 @@
+Progard.rules
+# Add any project specific keep options here:
+-keep class org.apache.http.** { *; }
+-keep class com.squareup.picasso
+-dontwarn org.apache.http.**
+-dontwarn com.squareup.picasso.**
+
+gradle.property
+-----------------------
+org.gradle.daemon=true
+org.gradle.parallel=true
+org.gradle.jvmargs=-Xmx2048m

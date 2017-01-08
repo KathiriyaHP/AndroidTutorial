@@ -1,0 +1,12 @@
+open sideview
+-----------------
+@Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+                super.onDrawerSlide(drawerView, slideOffset);
+
+                //For Move Activity with slide...
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+                    FrameLayout f = (FrameLayout) findViewById(R.id.frame_container);
+                    f.setTranslationX(slideOffset * drawerView.getWidth());
+                }
+            }
