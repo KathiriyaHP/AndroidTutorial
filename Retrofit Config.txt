@@ -1,0 +1,116 @@
+Step - 1 Configure gradle
+
+    implementation 'com.squareup.retrofit2:retrofit:2.5.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.4.1'
+    implementation 'com.squareup.okhttp3:okhttp:3.12.0'
+    implementation 'com.squareup.okhttp3:okhttp-urlconnection:3.3.1'
+
+Step - 2 Create ApiClient
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import java.io.IOException;
+
+import okhttp3.Credentials;
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
+
+/**
+ * Created by Kathiriya Harshad on 07/03/2017.
+ */
+
+public class ApiClient {
+
+//    public static final String BASE_URL = BuildConfig.
+    public static final String BASE_URL ="http://google.com";
+    private static Retrofit retrofit = null;
+
+    public static Retrofit getClient() {
+        if (retrofit==null) {
+            HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+            interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+
+            OkHttpClient okHttpClient = new OkHttpClient().newBuilder().addInterceptor(new Interceptor() {
+                @Override
+                public okhttp3.Response intercept(Interceptor.Chain chain) throws IOException {
+                    Request originalRequest = chain.request();
+                    Request.Builder builder = originalRequest.newBuilder().header("Authorization",
+                            Credentials.basic("basic", "1234"));
+                    Request newRequest = builder.build();
+                    return chain.proceed(newRequest);
+                }
+            }).addNetworkInterceptor(interceptor).build();
+
+
+            Gson gson = new GsonBuilder()
+                    .setLenient()
+                    .create();
+            retrofit =  new Retrofit.Builder()
+                    .addConverterFactory(GsonConverterFactory.create(gson))
+                    .baseUrl(BASE_URL)
+                    .client(okHttpClient)
+                    .build();
+        }
+        return retrofit;
+    }
+}
+
+
+Step- 3 Authentication intercept
+
+import java.io.IOException;
+
+import okhttp3.Interceptor;
+import okhttp3.Request;
+import okhttp3.Response;
+
+public class AuthenticationInterceptor implements Interceptor {
+
+    private String authToken;
+
+    public AuthenticationInterceptor(String token) {
+        this.authToken = token;
+    }
+
+    @Override
+    public Response intercept(Interceptor.Chain chain) throws IOException {
+        Request original = chain.request();
+
+        Request.Builder builder = original.newBuilder().header("Authorization", authToken);
+
+        Request request = builder.build();
+        return chain.proceed(request);
+    }
+}
+
+Step- 4 Service
+
+mport com.google.gson.JsonObject;
+
+import org.json.JSONObject;
+
+import retrofit2.Call;
+import retrofit2.http.Field;
+import retrofit2.http.POST;
+import retrofit2.http.Query;
+
+public interface ApiService {
+
+    String API_PATH = "/api/";
+
+    @POST(API_PATH+"Registration/json")
+    Call<JSONObject> registration(@Field("name") String name,@Field("email") String email,@Field("device_token") String device_token,@Field("device_type") String device_type,@Field("mobile") String mobile,@Field("password") String password);
+
+    @POST(API_PATH+"login/json")
+    Call<JsonObject> login(@Query("email_or_password") String email, @Query("password") String password, @Query("device_token")String device_token, @Query("device_type") String device_type);
+
+    @POST(API_PATH+"main_service_list/json")
+    Call<JsonObject> serviceList();
+}
